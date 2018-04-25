@@ -1,0 +1,49 @@
+
+<div class="alert alert-success" *ngIf="status == 'success'">
+    <strong>Registro completado!</strong> <a [routerLink]="['/login']">Identificate aquí</a>
+</div>
+
+<div class="alert alert-danger" *ngIf="status == 'error'">
+    <strong>No se concreto el registro</strong> 
+</div>
+
+<div class="col-md-8 col-md-offset-2">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title text-center"><b>{{ title }}</b></h3>
+        </div>
+        <div class="panel-body">
+              <form class="col-md-10 container col-md-offset-1" #registerForm="ngForm" (ngSubmit)="onsubmit(registerForm)">
+                <label>Nombre</label>
+                <input type="text" name="name" #name="ngModel" [(ngModel)]="user.name" class="form-control" required>
+                <span *ngIf="!name.valid && name.touched">
+                  El nombre es obligatorio
+                </span><br>
+                <label>Apellido</label>
+                <input type="text" name="surname" #surname="ngModel" [(ngModel)]="user.surname" class="form-control" required>
+                <span *ngIf="!surname.valid && surname.touched">
+                El apellido es obligatorio
+                </span><br>
+                <label>Nick</label>
+                <input type="text" name="nick" #nick="ngModel" [(ngModel)]="user.nick" class="form-control" required>
+                <span *ngIf="!nick.valid && nick.touched">
+                El Nick es obligatorio
+                </span><br>
+                <label>Correo</label>
+                <input type="email" name="email" #email="ngModel" [(ngModel)]="user.email" class="form-control"  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
+                <span *ngIf="!email.valid && email.touched">
+                Correo no valido
+                </span><br>
+                <label>Contraseña</label>
+                <input type="password" name="password" #password="ngModel" [(ngModel)]="user.password" class="form-control" required>
+                <span *ngIf="!password.valid && password.touched">
+                  La constraseña es obligatoria
+                </span>
+                <br>
+                <input type="submit" value="{{title}}" class="btn btn-succes" [disabled]="!registerForm.form.valid">
+            </form>     
+        </div>
+    </div>
+</div>
+
+

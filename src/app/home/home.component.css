@@ -1,0 +1,39 @@
+.img-social{
+    width: 100%;
+    text-align: center;
+    /*min-height: 100%!important;*/
+}
+
+.container-img{
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+/* Top left text */
+.top-left {
+    position: absolute;
+    top: 8px;
+    left: 16px;
+}
+
+.centered {
+    position: absolute;
+    top: 200px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@media screen and (max-width: 768px) {
+    h1{
+        font-size:15px;
+    }
+
+    .centered {
+        position: absolute;
+        top: 80px;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    
+}

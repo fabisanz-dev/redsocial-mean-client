@@ -1,0 +1,64 @@
+<div class="col-md-6">
+  <div class="container">
+    <legend>
+      {{ title }}
+    </legend>
+
+    <div class="alert alert-success" *ngIf="status == 'success'">
+      <strong>Datos actualizados!</strong> 
+    </div>
+  
+    <div class="alert alert-danger" *ngIf="status == 'error'">
+        <strong>No se concreto la actualizacion de datos</strong>: {{ message }}
+    </div>
+
+    <form #editUserForm="ngForm" (ngSubmit)="onsubmit()" class="col-md-6">
+      <p>
+        <label>Nombre</label>
+        <input type="text" name="name" #name="ngModel" [(ngModel)]="user.name" class="form-control"  required>
+        <span *ngIf="!name.valid && name.touched">
+          El nombre es obligatorio
+        </span>
+      </p>
+      <p>
+        <label>Apellido</label>
+        <input type="text" name="surname" #surname="ngModel" [(ngModel)]="user.surname" class="form-control"   required>
+        <span *ngIf="!surname.valid && surname.touched">
+          El Apellido es obligatorio
+        </span>
+      </p>
+      <p>
+        <label>Apodo</label>
+        <input type="text" name="nick" #nick="ngModel" [(ngModel)]="user.nick" class="form-control"  required>
+        <span *ngIf="!nick.valid && nick.touched">
+          El apodo es obligatorio
+        </span>
+      </p>
+      <p>
+        <label>Correo</label>
+        <input type="email" name="email" #email="ngModel" [(ngModel)]="user.email" class="form-control"  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
+        <span *ngIf="!email.valid && email.touched">
+          Correo no valido
+        </span>
+      </p>
+      <hr>
+      <input type="submit" class="btn btn-success center-block btn-lg" value="Guardar Cambios" [disabled]="!editUserForm.form.valid">
+    </form>
+
+    <div class="col-md-4 col-md-offset-2">
+        <label>Avatar</label>
+          <!--<img *ngIf="user.image; else imgAvatarDefault" src="{{ url +'getImage/'+ user.image }}" alt="image_avatar" height="100"> local-->
+          <img *ngIf="user.image; else imgAvatarDefault" src="{{ 'http://res.cloudinary.com/dftu7s8cf/image/upload/'+ user.image }}" alt="image_avatar" height="100">
+              <ng-template #imgAvatarDefault>
+                  <img *ngIf="!imagePreview" src="{{ url +'getImage/default-profile-user.png' }}" alt="image_avatar" height="100">
+              </ng-template>
+          <img *ngIf="imagePreview" src="{{ imagePreview }}" alt="image_preview" height="100">
+          <br>
+          <button *ngIf="imagePreview" class="btn btn-danger btn-xs" (click)="deleteImgPreview()">Borrar</button> 
+          <hr/>
+        Cambiar: <input type="file" name="imgAvatar" #imgAvatar  placeholder="Sube tu imagen" (change)="ChangeuploadFile($event)" accept=".jpeg, .jpg, .png">
+        <br>
+    </div>
+
+  </div>
+</div>

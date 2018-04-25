@@ -1,0 +1,35 @@
+<div class="col-xs-12 col-sm-8 col-md-8" *ngIf="message.length != 0; else messageNull">
+  
+  <div class="panel panel-default" *ngFor="let item of message">
+      <div class="panel-heading">
+          <div class="text-left">
+              <!--<img *ngIf="item.emitter.image" src="{{ url + 'getImage/' + item.emitter.image }}" alt="img-user-profile" class="img-circle img-responsive img-profile" width="30" height="30" align="left"/>-->
+              <img *ngIf="item.emitter.image" src="{{ 'http://res.cloudinary.com/dftu7s8cf/image/upload/' + item.emitter.image }}" alt="img-user-profile" class="img-circle img-responsive img-profile" width="30" height="30" align="left"/>
+              <img *ngIf="!item.emitter.image" src="{{ url + 'getImage/default-profile-user.png' }}" alt="img-user-profile" class="img-circle img-responsive float-left img-profile" width="30" height="30" align="left">  
+              &nbsp;{{ item.emitter.name }} {{ item.emitter.surname }} ({{ item.emitter.nick }})
+                   <b>-</b> {{ ( item.created_at | amFromUnix )  | amLocale:'es' | amTimeAgo }}
+          </div> 
+      </div>
+      <div class="panel-body">    
+        <p>
+          {{ item.text }}
+        </p>
+      </div>
+  </div>
+  
+
+  <hr/>
+  <div class="text-center" *ngIf="btnView">
+      <div class="btn-group">
+          <button *ngIf="page > 1" type="button" class="btn btn-primary" [routerLink]="['/messages/received', preview_page]">Anterior</button>
+          <button *ngIf="pages != page"  type="button" class="btn btn-primary" [routerLink]="['/messages/received', next_page]">Siguiente</button>
+      </div>
+  </div>
+  
+</div>
+
+<ng-template #messageNull>
+    <div class="col-md-12">
+        Casilla de mensajes recibidos vacia...
+    </div>
+</ng-template>

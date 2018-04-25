@@ -1,0 +1,37 @@
+<div class="alert alert-success" *ngIf="status == 'success'">
+    <strong>Se envió correctamente el mensaje a: {{ fullNameMessage }}. </strong>  <a [routerLink]="['/messages/sended', 1]"> Ver mensajes enviados.</a>
+</div>
+<div class="alert alert-danger" *ngIf="status == 'error'">
+        <strong>No se ha posiso enviar el mensaje.</strong>
+    </div>
+<form #sendMessageUserForm="ngForm" (ngSubmit)="onsubmit(sendMessageUserForm)" class="col-md-12">
+
+    <label for="receiver">Para</label>
+      <div *ngIf="idUserReceiverProfile; else inputReceiver">
+            &nbsp;&nbsp;<div class="badge">{{ userReceiverProfile }}</div>  
+      </div><br>
+      <ng-template #inputReceiver>
+            <div>
+                    <input type="text" class="form-control"  name="message" ngModel [(ngModel)]="term" [formControl]="search" [placeholder]="textSearchPlaceholder" (keyup)="receiverSearch()" required>
+                    <div *ngIf="searched">
+                          <ul class="list-group" *ngFor="let result of searched" style="position: absolute; z-index: 1!important;" class="col-md-11">
+                              <li class="list-group-item" (click)="userReceived(result.followed._id, $event)">{{ result.followed.name }} {{ result.followed.surname }}</li>
+                          </ul>
+                    </div>
+                    <span *ngIf="!term && message.touched">
+                          Ingrese el destinatario
+                    </span>
+                </div>
+      </ng-template>
+      
+  <p>
+    <label for="textMessage">Mensaje</label>
+    <textarea class="form-control" name="textMessage" id="textMessage" cols="30" rows="10" #textMessage="ngModel" [(ngModel)]="message.text"></textarea>
+
+    <span *ngIf="!message.text && textMessage.touched">
+        Ingrese el texto
+    </span>
+  </p>
+
+  <input type="submit" class="btn btn-success" value="Enviar"  [disabled]="!message.text || !message.receiver">
+</form>

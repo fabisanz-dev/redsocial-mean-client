@@ -1,0 +1,24 @@
+<div class="container ">
+        <div>
+            <div class="container-img">
+                <img class="img-social col-md-12 col-xs-12" src="https://s26.postimg.cc/3wdrwj49l/adventure-backlit-community-207896.jpg" alt="img-social">
+                <div class="top-left">
+                  <legend style="color: white">Red social MEAN</legend>
+                </div>
+                <div *ngIf="identity" class="centered">
+                    <div class="row">
+                        <h1>Bienvenido <strong *ngIf="identity">{{identity.name}} {{identity.surname}}</strong></h1>
+                        
+                        <span class="input-group-btn">
+                            <a class="btn btn-primary btn-md" [routerLink]="['profile-user', identity._id]">Mi perfil</a>
+                            <a class="btn btn-info btn-md" [routerLink]="['publications']">Publicaciones</a>
+                            <a class="btn btn-success btn-md" [routerLink]="['users']">Gente</a>
+                        </span>
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+

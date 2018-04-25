@@ -1,0 +1,37 @@
+.navbar{
+    border-radius: 0px!important;
+    background-color: #EB6864!important;
+    border: none;
+}
+
+.navbar *{
+    color: white;
+}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:focus, .navbar-default .navbar-nav > .active > a:hover{
+    color: white;
+    background-color: #e53c37;
+}
+
+.active{
+    background-color: #e53c37;
+}
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus{
+    color: white!important;
+    background-color: #e53c37!important;
+}
+
+
+.dropdown-menu>li>a{
+    color: black!important;
+}
+
+.dropdown-menu>li>a>i{
+    color: black!important;
+}
+
+.circle-custom{
+    border : solid 1px black;
+    margin-top: 5px;
+}

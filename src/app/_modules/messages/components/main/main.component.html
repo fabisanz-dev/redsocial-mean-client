@@ -1,0 +1,16 @@
+<div class="col-md-12">
+  <div class="container">
+      <div class="col-md-3">
+          <ul class="nav nav-pills nav-stacked">
+            <li role="presentation"><a [routerLink]="['addMessage']" [routerLinkActive]="['active']">Enviar Mensaje</a></li>
+            <li role="presentation"><a [routerLink]="['received', 1]" [routerLinkActive]="['active']">Mensajes recibidos</a></li>
+            <li role="presentation"><a [routerLink]="['sended', 1]" [routerLinkActive]="['active']">Mensajes enviados</a></li>
+          </ul>
+        </div>
+        <div class="col-md-9">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+  </div>
+ 
+

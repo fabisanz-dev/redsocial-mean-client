@@ -1,0 +1,197 @@
+<div class="col-md-12">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 pull-left">
+                <app-sidebar (sendPublication)="refreshPublication($event)" [updateSidebar]="updateSidebarFollow"></app-sidebar>
+			</div>
+			<div class="col-md-8 pull-right" *ngIf="publications.length == 0;else getPublications">
+				No hay publicaciones vigentes
+			</div>
+		
+			<ng-template #getPublications>
+					<div class="col-xs-12 col-sm-8 col-md-8 pull-right">
+							<legend>
+								{{ text }}
+								<button class="btn btn-primary btn-sm pull-right" (click)="refreshPublication($event)">
+									<i class="glyphicon glyphicon-refresh"></i></button>
+							</legend>
+							
+							<div class="qa-message-list" id="wallmessages"  *ngFor="let item of publications">
+								<div class="message-item" id="{{ item._id }}">
+									<div class="message-inner">
+										<div class="message-head clearfix">
+											<div  class="avatar pull-left">
+												<a href="#">
+													<!--<img *ngIf="item.user.image; else imgProfileUser" src="{{ url + 'getImage/' + item.user.image }}">-->
+													<img *ngIf="item.user.image; else imgProfileUser" src="{{ 'http://res.cloudinary.com/dftu7s8cf/image/upload/' + item.user.image }}">
+													<ng-template #imgProfileUser>
+														<img  src="{{ url + 'getImage/default-profile-user.png' }}">
+													</ng-template>
+												</a>
+											</div>
+											<div class="user-detail">
+													<div class="pull-right" *ngIf="identity == item.user._id">
+															<!-- Trigger the modal with a button -->
+															<a href="#deletePublicationModal{{ item._id }}" class="btn btn-danger btn-xs" role="button" data-toggle="modal">x</a>
+															<!-- Modal delete publication -->
+															<div id="deletePublicationModal{{ item._id }}" class="modal fade" role="dialog">
+																<div class="modal-dialog modal-md">
+																	<div class="modal-content">
+																	<div class="modal-header">
+																		<button type="button" class="close" data-dismiss="modal">&times;</button>
+																		<h4 class="modal-title">Mensaje de aviso</h4>
+																	</div>
+																	<div class="modal-body">
+																		<b>Esta seguro de que desea eliminar esta publicacion?</b><br>
+																		<small>Una vez confirmada la accion, no re recuperaran los datos</small>
+																	</div>
+																	<div class="modal-footer">
+																		<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+																		<button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteThisPublication(item._id)">Aceptar</button>
+																	</div>
+																	</div>
+																</div>
+															</div><!-- Modal -->
+														</div>
+			
+												<h5 class="handle"><a [routerLink]="['/profile-user', item.user._id ]">{{ item.user.name }} {{ item.user.surname }}</a></h5>
+												<div class="post-meta">
+													<div class="asker-meta">
+														<span class="qa-message-what"></span>
+														<span class="qa-message-when">
+															<span class="qa-message-when-data">{{ ( item.created_at | amFromUnix )  | amLocale:'es' | amTimeAgo }}</span>
+														</span>
+														<span class="qa-message-who">
+															<span class="qa-message-who-pad">- por </span>
+															<span class="qa-message-who-data"><b>{{ item.user.name }} {{ item.user.surname }}</b></span>
+														</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="qa-message-content">
+											<p>{{ item.text }}</p>
+											<hr>
+											<div>
+												
+												<div class="text-left" *ngIf="likesUserPublication">
+														<span *ngIf="item.likes > 0" class="badge" class="tooltips">
+															<a class="btn btn-link btn-xs" data-toggle="modal"  href="{{'#modal-likes-users' + item._id}}">{{ item.likes }} copados</a>
+														</span>&nbsp;
+														<button *ngIf="likesUserPublication.indexOf(item._id) < 0" class="btn btn-warning btn-xs" (click)="addlikePublication(item._id)">Te copo?</button>
+														<span *ngIf="likesUserPublication.indexOf(item._id) >= 0">
+															<button  class="btn btn-success btn-xs" (click)="deslike(item._id)"
+																	(mouseenter)="mouseEnter(item._id)"
+																	(mouseleave)="mouseLeave()"
+																	[class.btn-danger]="publicationLikeOver == item._id"
+																>
+																<span>
+																	<span *ngIf="publicationLikeOver == item._id; else following" >
+																		<span class="glyphicon glyphicon-remove"></span> Ya no me copa
+																	</span>
+																		<ng-template #following>
+																		<i class="glyphicon glyphicon-ok"></i> Te copaste!
+																		</ng-template>
+																</span>
+															</button>
+														</span>
+
+												 </div>
+												  <!-- modal para que muestre los usuarios que dieron like-->
+														<div class="modal fade" id="{{ 'modal-likes-users' + item._id}}">
+															<div class="modal-dialog">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+																		<h5 class="modal-title">Usuarios que les copo esto</h5>
+																	</div>
+																	<div class="modal-body">
+																		  <div *ngIf="likesPublication">
+																				<div *ngFor="let likeItem of likesPublication">
+																						<span *ngIf="item._id == likeItem.publication">
+																							<div class="text-center">
+																									<img *ngIf="likeItem.user.image" src="{{'http://res.cloudinary.com/dftu7s8cf/image/upload/' + likeItem.user.image}}" alt="image_profile_likes">
+																									<img *ngIf="!likeItem.user.image" src="{{ url + 'getImage/default-profile-user.png' }}" alt="image_profile_likes">
+																								<i *ngIf="identity == likeItem.user._id">
+																									Tú
+																								</i>
+																								<i *ngIf="identity != likeItem.user._id">
+																									{{ likeItem.user.name }} {{ likeItem.user.surname }}
+																								</i>
+																							</div> 
+																						</span>
+																				   </div>
+																		  </div>
+																	</div>
+																	<div class="modal-footer">
+																		<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+																	</div>
+																</div>
+															</div>
+														</div>
+													
+													</div>
+												
+											
+																		
+											<div *ngIf="item.file">
+													<div class="text-center">
+														<button *ngIf="showImage != item._id; else btnCloseImg" class="btn btn-info" (click)="showImagePub(item._id)">
+															<i class="glyphicon glyphicon-picture"></i>
+														</button>
+														<ng-template #btnCloseImg>
+														   <button  class="btn btn-danger" (click)="hideImagePub()">
+															   <i class="glyphicon glyphicon-remove-circle"></i>
+															</button>    
+														</ng-template>
+													</div>
+													
+												<!--<img *ngIf="showImage == item._id" src="{{ url + 'get-file-publication/' +  item.file }}" alt="img-user-publication" class="img-user-publication img-responsive"> para servidor-->
+												<img *ngIf="showImage == item._id" src="{{ 'http://res.cloudinary.com/dftu7s8cf/image/upload/' +  item.file }}" alt="img-user-publication" class="img-user-publication img-responsive">
+											</div> 
+										</div>
+										
+								</div> 
+							</div>
+						</div><!-- qa-message-list --> 
+			
+							<div class="text-center">
+								<div *ngIf="total > 4">
+										<button class="btn btn-success btn-md" (click)="viewMore()" *ngIf="!btnViewMore; else loading">
+											ver mas
+										</button>
+								</div>
+								<ng-template #loading>
+									<!--loading-->
+								<div *ngIf="loadingPage != 'true'" class="col-md-4 col-md-offset-4"> 
+										<div class="sk-fading-circle pull-right" >
+												<div class="sk-circle1 sk-circle"></div>
+												<div class="sk-circle2 sk-circle"></div>
+												<div class="sk-circle3 sk-circle"></div>
+												<div class="sk-circle4 sk-circle"></div>
+												<div class="sk-circle5 sk-circle"></div>
+												<div class="sk-circle6 sk-circle"></div>
+												<div class="sk-circle7 sk-circle"></div>
+												<div class="sk-circle8 sk-circle"></div>
+												<div class="sk-circle9 sk-circle"></div>
+												<div class="sk-circle10 sk-circle"></div>
+												<div class="sk-circle11 sk-circle"></div>
+												<div class="sk-circle12 sk-circle"></div>
+										</div>
+								</div>
+								</ng-template>
+								
+							</div>
+						</div><!-- col --> 
+			</ng-template>
+          
+
+				 
+			
+		</div><!--row-->  
+		
+		
+    </div><!--container-->
+</div>
+
+

@@ -1,0 +1,77 @@
+<div class="col-md-12">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 pull-left">
+                <app-sidebar [updateSidebar]="updateSidebarFollow"></app-sidebar>
+            </div>
+            <div *ngIf="userSearchDate && identity">
+                <span *ngIf="userSearchDate.email  == identity.email; else userFollowDefault">
+                    <legend>Usuarios que te siguen</legend>
+                </span>
+                <ng-template #userFollowDefault>
+                    <legend>{{ title }} {{ userSearchDate.name }} {{ userSearchDate.surname }}</legend>
+                </ng-template>
+            </div>          
+            <div *ngIf="followedContent.length == 0; else FollowedUsers">
+                No tienes seguidores
+            </div>
+            <ng-template #FollowedUsers>
+                <div class="col-xs-12 col-sm-8 col-md-8">
+                    <div class="well well-sm"  *ngFor="let item of followedContent">
+                        <div class="row">
+                            <div class="col-sm-6 col-md-4">
+                                <!--<img *ngIf="item.user.image" src="{{ url + 'getImage/' + item.user.image }}" alt="" class="img-rounded img-responsive" height="100"/>-->
+                                <img *ngIf="item.user.image" src="{{ 'http://res.cloudinary.com/dftu7s8cf/image/upload/' + item.user.image }}" alt="" class="img-rounded img-responsive" height="100"/>
+                                <img *ngIf="!item.user.image" src="{{ url + 'getImage/default-profile-user.png' }}" alt="" class="img-rounded img-responsive" height="100"/>
+                            </div>
+                            <div class="col-sm-6 col-md-8">
+                                <h4><a [routerLink]="['/profile-user', item.user._id]">{{ item.user.name}} {{ item.user.surname }}</a></h4>
+                                <small><cite title="country">springfield <i class="glyphicon glyphicon-map-marker">
+                                </i></cite></small>
+                                <p>
+                                    <i class="glyphicon glyphicon-envelope"></i>{{ item.user.email }}
+                                    <br />
+                                    <i class="glyphicon glyphicon-globe"></i> {{ item.user.nick }}
+                                    <br />
+                                    <i class="glyphicon glyphicon-gift"></i> {{ item.user.role }}
+                                </p>
+                                <hr>
+                                <div *ngIf="item.user._id != identity._id">
+                                    <button class="btn btn-primary" *ngIf="following.indexOf(item.user._id) < 0" (click)="addFollow(item.user._id)">
+                                        <i class="glyphicon glyphicon-plus-sign"></i> Seguir
+                                     </button>
+                                     <button class="btn btn-success"  *ngIf="following.indexOf(item.user._id) >= 0" (click)="deleteFollow(item.user._id)"
+                                         (mouseenter)="mouseEnter(item.user._id)"
+                                         (mouseleave)="mouseLeave(item.user._id)"
+                                         [class.btn-danger]="followUserOver == item.user._id"
+                                       >
+                                        <i>
+                                            <i *ngIf="followUserOver == item.user._id; else following">
+                                               <i class="glyphicon glyphicon-remove"></i> Dejar de seguir
+                                             </i>
+                                             <ng-template #following>
+                                               <i class="glyphicon glyphicon-ok"></i> Siguiendo
+                                             </ng-template>
+                                        </i>
+                                     </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <hr/>
+                    <div class="text-center" *ngIf="total > 4">
+                        <div class="btn-group">
+                            <button *ngIf="page > 1" type="button" class="btn btn-primary" [routerLink]="['/following-user', userSearchId, preview_page]">Anterior</button>
+                            <button *ngIf="pages != page"  type="button" class="btn btn-primary" [routerLink]="['/following-user', userSearchId,  next_page]">Siguiente</button>
+                        </div>
+                    </div>
+                    
+                </div>
+            </ng-template>
+            
+        </div><!--row-->  
+    </div><!--container-->
+</div>
+
+
